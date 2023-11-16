@@ -2,11 +2,55 @@ import streamlit as st
 #from web_demo2 import show_financial_advisor  # Importing the function
 from survey import save_results, show_survey, questions
 from chatbot import chatbot
+from theme import toggle
 
+
+# Dummy admin credentials for the example
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "password"
+
+def is_admin(username, password):
+    return username == ADMIN_USERNAME and password == ADMIN_PASSWORD
+
+def login_page():
+    st.title("Login")
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+
+    col1, col2 = st.columns([6,1])
+
+    with col1:
+        if st.button("Login"):
+            if is_admin(username, password):
+                st.session_state["user_type"] = "admin"
+                st.experimental_rerun()
+            else:
+                st.session_state["user_type"] = "user"
+                st.experimental_rerun()
+
+    with col2:
+        if st.button("문제풀기"):
+            st.session_state["user_type"] = "user"
+            st.experimental_rerun()
+
+    return False  # User not logged in yet
 
 def main():
+    if 'user_type' not in st.session_state:
+        st.session_state['user_type'] = None
 
-    
+    # Check user type and proceed accordingly
+    if st.session_state['user_type'] is None:
+        login_page()
+    elif st.session_state['user_type'] == "admin":
+        # Admin view - show the survey page
+        handle_survey()
+    else:
+        # User view - go directly to the chatbot
+        chatbot()
+
+def handle_survey():
+    # Initialize survey state
     if 'current_question' not in st.session_state:
         st.session_state.current_question = 0
     if 'answers' not in st.session_state:
@@ -16,17 +60,15 @@ def main():
     if 'show_submit_button' not in st.session_state:
         st.session_state.show_submit_button = False
 
-    
+    # Survey logic
     if st.session_state.submitted:
         save_results()
         chatbot()
     elif st.session_state.show_submit_button:
-        st.write("모든 질문에 답하셨습니다.")  # Debug Line
-        st.write("결과를 보시려면 '제출' 버튼을 누르세요.")  # Debug Line
-        col1, col2 = st.columns(2)  # Create two columns
-        #st.write("Button Condition:", st.session_state.show_submit_button)  # Debug Line
+        st.write("모든 질문에 답하셨습니다.")
+        st.write("결과를 보시려면 '제출' 버튼을 누르세요.")
+        col1, col2 = st.columns(2)
         
-        # Place buttons in the columns instead of in the main app, so they appear side-by-side
         with col1:
             if st.button("제출"):
                 st.session_state.submitted = True
@@ -61,8 +103,8 @@ document.addEventListener("DOMContentLoaded", function(event){
     const footer = streamlitDoc.getElementsByTagName("footer")[0];
     footer.innerHTML = `
         Provided by 
-        <a target="_blank" class="css-z3au9t egzxvld2">Team MiZi(미지)   </a>
-        <img src="https://i.namu.wiki/i/RMFfYwm6uMpMAbnzBf9ZKX2mM3ro6TzG-FSCPOnyxT5pZQdUc0Ftp6pq3wGuHcBz74ly-Nt7JwkypXDNS3kqV9yfXVoeziDMJxlWIwsH816HwkzN4kGTuCElz4iMUvg6Ckdjy91lGUZ-UDcwghpR0g.webp" alt="DGB" height="30">
+        <a target="_blank" class="css-z3au9t egzxvld2">Team 미래의료연구소   </a>
+        <img src="https://www.state.gov/wp-content/uploads/2019/04/shutterstock_683522173-2560x852.jpg" alt="의료" height="30">
         
     `;
 });
@@ -72,4 +114,6 @@ document.addEventListener("DOMContentLoaded", function(event){
     st.components.v1.html(footer_setup)
     
 if __name__ == "__main__":
+    with st.sidebar:
+        toggle()
     main()
