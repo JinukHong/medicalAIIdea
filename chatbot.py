@@ -19,6 +19,30 @@ def chatwrite(texttowrite):
         yield line + "\n"
         time.sleep(0.05)
 
+def analyze_and_provide_feedback(user_questions, patient_responses):
+    # Example criteria: Did the user ask about key symptoms?
+    key_symptoms = ['COPD', 'Tuberculosis', 'healthy']
+    score = 0
+    missed_symptoms = []
+
+    for symptom in key_symptoms:
+        if any(symptom in question for question in user_questions):
+            score += 10  # Assign points for each key symptom asked
+        else:
+            missed_symptoms.append(symptom)
+
+    feedback = f"Your score: {score}/30.\n"
+    if missed_symptoms:
+        feedback += f"You missed asking about these key symptoms: {', '.join(missed_symptoms)}.\n"
+
+    # Add more analysis and customized feedback as needed
+    return feedback
+
+# # Example usage at the end of the session
+# feedback = analyze_and_provide_feedback(st.session_state['past'], st.session_state['generated'])
+# message(feedback, key="feedback")
+
+
 def chatbot():
     
 
