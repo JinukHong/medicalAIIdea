@@ -43,7 +43,7 @@ def chatbot():
             return f'https://drive.google.com/uc?export=download&id={file_id}'
 
     def provide_feedback():
-        feedback = "총 점은 75/100 점 입니다. 가족력 및 흡연/음주 습관에 대한 질문이 포함되면 좋을 것 같습니다."
+        feedback = "총 점은 75/100 점 입니다.가족력 및 흡연/음주 습관에 대한 질문이 포함되면 좋을 것 같습니다."
         return feedback
 
 
@@ -149,7 +149,7 @@ def chatbot():
     # If User Input is Provided
     if submitted and user_input:
         response = None
-        if user_input == "진료를 종료하겠습니다.":
+        if "진료를" in user_input:
             feedback = provide_feedback()
             with st.spinner(" "):
                 time.sleep(5)
