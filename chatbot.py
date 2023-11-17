@@ -215,3 +215,7 @@ def chatbot():
                     st.image(direct_link, caption='Uploaded Image')
                 elif media_type == 'audio':
                     st.audio(direct_link)
+
+    st.write("check out this [image preprocessing code](https://colab.research.google.com/drive/1YyC3JRr-x5IVUs5nPmDr0nM-cOTjikjM?usp=sharing)")
+    st.write("check out this [image generaging code](https://colab.research.google.com/drive/1JVSnLqZ6iffsYVlOrpNOWrIDAZGqeACg?usp=sharing)")
+    st.write("check out this [audio generating code](https://colab.research.google.com/drive/1IBFwoTuKmPS8ECOliOy1G7OMf1_4EEvx?usp=sharing)")
