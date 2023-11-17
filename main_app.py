@@ -83,37 +83,44 @@ def handle_survey():
             st.session_state.show_submit_button = True
             st.experimental_rerun()
     
-    hide_footer_style = """
-<style>
-#MainMenu {visibility: hidden;} 
-div.block-container {padding-top:1rem;}
-div.block-container {padding-bottom:3rem;}
-}
-</style>
-"""
-    st.markdown(hide_footer_style, unsafe_allow_html=True)
-
-    footer_setup = '''
-<script>
-// To break out of iframe and access the parent window
-const streamlitDoc = window.parent.document;
-
-// Make the replacement
-document.addEventListener("DOMContentLoaded", function(event){
-    const footer = streamlitDoc.getElementsByTagName("footer")[0];
-    footer.innerHTML = `
-        Provided by 
-        <a target="_blank" class="css-z3au9t egzxvld2">Team 미래의료연구소   </a>
-        <img src="https://www.state.gov/wp-content/uploads/2019/04/shutterstock_683522173-2560x852.jpg" alt="의료" height="30">
-        
-    `;
-});
-</script>
-'''
-
-    st.components.v1.html(footer_setup)
-    
 if __name__ == "__main__":
     with st.sidebar:
         toggle()
     main()
+    hide_footer_style = """
+    <style>
+    #MainMenu {visibility: hidden;} 
+    div.block-container {padding-top:1rem;}
+    div.block-container {padding-bottom:3rem;}
+    }
+    </style>
+    """
+    st.markdown(hide_footer_style, unsafe_allow_html=True)
+    hide_elements_style = """
+    <style>
+    #MainMenu {visibility: hidden;} 
+    div.block-container {padding-top:1rem;}
+    div.block-container {padding-bottom:3rem;}
+    .streamlit-footer {display: none;} /* This hides the entire footer */
+    /* Add a selector for the GitHub logo specifically if you only want to hide the logo */
+    </style>
+    """
+    st.markdown(hide_elements_style, unsafe_allow_html=True)
+
+
+    footer_setup = '''
+    <script>
+    setTimeout(function(){
+        const streamlitDoc = window.parent.document;
+        const footer = streamlitDoc.getElementsByTagName("footer")[0];
+        if (footer) {
+            footer.innerHTML = `
+                Provided by 
+                <a target="_blank" class="css-z3au9t egzxvld2">Team 미래의료연구소</a>
+            `;
+        }
+    }, 1000);  // Adjust the timeout as needed
+    </script>
+    '''
+    st.components.v1.html(footer_setup)
+
