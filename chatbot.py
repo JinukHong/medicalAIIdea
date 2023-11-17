@@ -91,7 +91,7 @@ def chatbot():
 }
 
     # App Header
-    st.write("hello")
+    st.write("[Medi Solve]")
     st.header("🩺AI 환자에게 질문하세요 ")
 
     # Session State for Messages
