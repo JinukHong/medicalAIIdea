@@ -1,10 +1,12 @@
 import streamlit as st
 
+# Define the CSS styles for dark and light themes
 def toggle():
     dark = '''
     <style>
         .stApp {
         background-color: black;
+        color: white;
         }
     </style>
     '''
@@ -13,27 +15,26 @@ def toggle():
     <style>
         .stApp {
         background-color: white;
+        color: black;
         }
     </style>
     '''
 
-    st.markdown(light, unsafe_allow_html=True)
+    # Create a checkbox to act as a toggle for the theme
+    toggle = st.toggle("테마 변경", value=False)
 
-    # Create a toggle button
-    toggle = st.button("Toggle theme")
 
-    # Use a global variable to store the current theme
+    # Use a session state variable to store the current theme
     if "theme" not in st.session_state:
         st.session_state.theme = "light"
 
-    # Change the theme based on the button state
+    # Change the theme based on the checkbox state
     if toggle:
-        if st.session_state.theme == "light":
-            st.session_state.theme = "dark"
-        else:
-            st.session_state.theme = "light"
+        st.session_state.theme = "dark"
+    else:
+        st.session_state.theme = "light"
 
-    # Apply the theme to the app
+    # Apply the chosen theme to the app
     if st.session_state.theme == "dark":
         st.markdown(dark, unsafe_allow_html=True)
     else:

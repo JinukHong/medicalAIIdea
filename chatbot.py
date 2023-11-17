@@ -42,6 +42,11 @@ def chatbot():
         elif media_type == 'audio':
             return f'https://drive.google.com/uc?export=download&id={file_id}'
 
+    def provide_feedback():
+        feedback = "총 점은 75/100 점 입니다. 가족력 및 흡연/음주 습관에 대한 질문이 포함되면 좋을 것 같습니다."
+        return feedback
+
+
 
 
     qna_mapping = {
@@ -144,42 +149,49 @@ def chatbot():
     # If User Input is Provided
     if submitted and user_input:
         response = None
-        for keyword in qna_mapping:
-            if keyword in user_input:
-                response = qna_mapping[keyword]
-                break
-        
-        if response is None:
-        
+        if user_input == "진료를 종료하겠습니다.":
+            feedback = provide_feedback()
             with st.spinner(" "):
-                completion = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo-0613",
-                    messages=[
-                        {"role": "system", "content": system_message},
-                        {"role": "user", "content": prompt}
-                    ]
-                )
-                response = completion.choices[0].message.content
-        with st.spinner(" "):
-            time.sleep(1.2)
-        
-        #with st.chat_message("assistant", avatar="https://github.com/JinukHong/shadowFunk/assets/45095330/eceff742-486e-46d8-b501-72efede31c25"):
-            # st.write(f"{response}")
-            #write(chatwrite(response))
-            # st.divider()
-            # write(chatwrite(translated_response))
-            # Handle media based on the response
+                time.sleep(5)
+                message(feedback, key="feedback")
+        else:
+            for keyword in qna_mapping:
+                if keyword in user_input:
+                    response = qna_mapping[keyword]
+                    break
+            
+            if response is None:
+            
+                with st.spinner(" "):
+                    completion = openai.ChatCompletion.create(
+                        model="gpt-3.5-turbo-0613",
+                        messages=[
+                            {"role": "system", "content": system_message},
+                            {"role": "user", "content": prompt}
+                        ]
+                    )
+                    response = completion.choices[0].message.content
+            with st.spinner(" "):
+                time.sleep(1.2)
+            
+            #with st.chat_message("assistant", avatar="https://github.com/JinukHong/shadowFunk/assets/45095330/eceff742-486e-46d8-b501-72efede31c25"):
+                # st.write(f"{response}")
+                #write(chatwrite(response))
+                # st.divider()
+                # write(chatwrite(translated_response))
+                # Handle media based on the response
 
 
 
-        # Update Session States
-        st.session_state.past.append(user_input)
-        st.session_state.generated.append(response)
+            # Update Session States
+        if response is not None:
+            st.session_state.past.append(user_input)
+            st.session_state.generated.append(response)
 
-        # Displaying past interactions and responses
-        # for message, resp in zip(st.session_state.past, st.session_state.generated):
-        #     st.write(f"You: {message}")
-        #     st.write(f"Chatbot: {resp}")
+            # Displaying past interactions and responses
+            # for message, resp in zip(st.session_state.past, st.session_state.generated):
+            #     st.write(f"You: {message}")
+            #     st.write(f"Chatbot: {resp}")
 
     # Display Past Messages and Responses
     if st.session_state['generated']:

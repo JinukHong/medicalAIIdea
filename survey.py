@@ -66,71 +66,74 @@ def show_survey():
     elif current_q["type"] == "text":
         answer = st.text_input("Your answer", key=str(st.session_state.current_question))
     
-    if st.button("Next") and answer is not None:
-        # Add the answer to the dictionary
-        st.session_state.answers[current_q["question"]] = answer
-        if st.session_state.current_question == 13: # 다른 증상
-            if answer == "네": 
-                st.session_state.current_question += 1  # Go on
+    cols = st.columns([1, 1])
+
+    with cols[0]:
+        if st.button("Next") and answer is not None:
+            # Add the answer to the dictionary
+            st.session_state.answers[current_q["question"]] = answer
+            if st.session_state.current_question == 13: # 다른 증상
+                if answer == "네": 
+                    st.session_state.current_question += 1  # Go on
+                else:
+                    st.session_state.current_question += 2  # Skip 
+
+            elif st.session_state.current_question == 20:  # 최근 다친적
+                if answer == "네":
+                    st.session_state.current_question += 1  # Go on
+                else:
+                    st.session_state.current_question += 2  # Skip 
+
+            elif st.session_state.current_question == 23: #최근 수술
+                if answer == "네":  
+                    st.session_state.current_question += 1  # Go on
+                else: 
+                    st.session_state.current_question += 2
+            
+            elif st.session_state.current_question == 28: #약물
+                if answer == "네":  
+                    st.session_state.current_question += 1  # Go on
+                else:
+                    st.session_state.current_question += 2
+            
+            elif st.session_state.current_question == 30: #흡연
+                if answer == "네":  
+                    st.session_state.current_question += 1  # Go on
+                else:
+                    st.session_state.current_question += 2
+
+            
+            elif st.session_state.current_question == 32:
+                if answer == "네":  
+                    st.session_state.current_question += 1  # Go on
+                else:
+                    st.session_state.current_question += 2
+
+            # elif st.session_state.current_question == 14:
+            #     if answer == "네":  # 자녀
+            #         st.session_state.current_question += 1  # Go on
+            #     else:
+            #         st.session_state.current_question += 4
+            
+            # elif st.session_state.current_question == 16:
+            #     if answer == "네":  # 자녀
+            #         st.session_state.current_question += 1  # Go on
+            #     else:
+            #         st.session_state.current_question += 2
+
+
+
+            elif st.session_state.current_question < len(questions) - 1:
+                st.session_state.current_question += 1  # Normal flow
             else:
-                st.session_state.current_question += 2  # Skip 
+                st.session_state.show_submit_button = True
+            st.experimental_rerun()
 
-        elif st.session_state.current_question == 20:  # 최근 다친적
-            if answer == "네":
-                st.session_state.current_question += 1  # Go on
-            else:
-                st.session_state.current_question += 2  # Skip 
-
-        elif st.session_state.current_question == 23: #최근 수술
-            if answer == "네":  
-                st.session_state.current_question += 1  # Go on
-            else: 
-                st.session_state.current_question += 2
-        
-        elif st.session_state.current_question == 28: #약물
-            if answer == "네":  
-                st.session_state.current_question += 1  # Go on
-            else:
-                st.session_state.current_question += 2
-        
-        elif st.session_state.current_question == 30: #흡연
-            if answer == "네":  
-                st.session_state.current_question += 1  # Go on
-            else:
-                st.session_state.current_question += 2
-
-        
-        elif st.session_state.current_question == 32:
-            if answer == "네":  
-                st.session_state.current_question += 1  # Go on
-            else:
-                st.session_state.current_question += 2
-
-        # elif st.session_state.current_question == 14:
-        #     if answer == "네":  # 자녀
-        #         st.session_state.current_question += 1  # Go on
-        #     else:
-        #         st.session_state.current_question += 4
-        
-        # elif st.session_state.current_question == 16:
-        #     if answer == "네":  # 자녀
-        #         st.session_state.current_question += 1  # Go on
-        #     else:
-        #         st.session_state.current_question += 2
-
-
-
-        elif st.session_state.current_question < len(questions) - 1:
-            st.session_state.current_question += 1  # Normal flow
-        else:
-            st.session_state.show_submit_button = True
-        st.experimental_rerun()
-
-        
-    if st.button("Previous") and st.session_state.current_question > 0:
-        st.session_state.answers.pop()
-        st.session_state.current_question -= 1
-        st.experimental_rerun()
+    with cols[1]:
+        if st.button("Previous") and st.session_state.current_question > 0:
+            st.session_state.answers.pop()
+            st.session_state.current_question -= 1
+            st.experimental_rerun()
 
 
 questions_mapping = {
