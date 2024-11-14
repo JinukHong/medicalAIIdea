@@ -190,7 +190,7 @@ def chatbot():
             
                 with st.spinner(" "):
                     completion = openai.ChatCompletion.create(
-                        model="gpt-3.5-turbo-0613",
+                        model="gpt-4o",
                         messages=[
                             {"role": "system", "content": system_message},
                             {"role": "user", "content": prompt}
@@ -242,6 +242,6 @@ def chatbot():
                 elif media_type == 'audio':
                     st.audio(direct_link)
 
-    st.write("check out this [image preprocessing code](https://colab.research.google.com/drive/1YyC3JRr-x5IVUs5nPmDr0nM-cOTjikjM?usp=sharing)")
-    st.write("check out this [image generaging code](https://colab.research.google.com/drive/1JVSnLqZ6iffsYVlOrpNOWrIDAZGqeACg?usp=sharing)")
-    st.write("check out this [audio generating code](https://colab.research.google.com/drive/1IBFwoTuKmPS8ECOliOy1G7OMf1_4EEvx?usp=sharing)")
+    # st.write("check out this [image preprocessing code](https://colab.research.google.com/drive/1YyC3JRr-x5IVUs5nPmDr0nM-cOTjikjM?usp=sharing)")
+    # st.write("check out this [image generaging code](https://colab.research.google.com/drive/1JVSnLqZ6iffsYVlOrpNOWrIDAZGqeACg?usp=sharing)")
+    # st.write("check out this [audio generating code](https://colab.research.google.com/drive/1IBFwoTuKmPS8ECOliOy1G7OMf1_4EEvx?usp=sharing)")

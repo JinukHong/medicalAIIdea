@@ -23,15 +23,15 @@ def login_page():
         if st.button("Login"):
             if is_admin(username, password):
                 st.session_state["user_type"] = "admin"
-                st.experimental_rerun()
+                st.rerun()
             else:
                 st.session_state["user_type"] = "user"
-                st.experimental_rerun()
+                st.rerun()
 
     with col2:
         if st.button("문제풀기"):
             st.session_state["user_type"] = "user"
-            st.experimental_rerun()
+            st.rerun()
 
     return False  # User not logged in yet
 
@@ -81,7 +81,7 @@ def handle_survey():
         if st.button("Skip"):
             st.session_state.current_question = len(questions) - 1
             st.session_state.show_submit_button = True
-            st.experimental_rerun()
+            st.rerun()
     
 if __name__ == "__main__":
     with st.sidebar:

@@ -19,6 +19,7 @@ def toggle():
         }
     </style>
     '''
+    
 
     # Create a checkbox to act as a toggle for the theme
     toggle = st.toggle("테마 변경", value=False)

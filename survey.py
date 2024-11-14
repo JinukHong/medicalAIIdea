@@ -122,18 +122,17 @@ def show_survey():
             #         st.session_state.current_question += 2
 
 
-
             elif st.session_state.current_question < len(questions) - 1:
                 st.session_state.current_question += 1  # Normal flow
             else:
                 st.session_state.show_submit_button = True
-            st.experimental_rerun()
+            st.rerun()
 
     with cols[1]:
         if st.button("Previous") and st.session_state.current_question > 0:
             st.session_state.answers.pop()
             st.session_state.current_question -= 1
-            st.experimental_rerun()
+            st.rerun()
 
 
 questions_mapping = {
