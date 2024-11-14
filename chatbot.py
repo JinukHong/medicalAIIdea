@@ -6,12 +6,21 @@ from get_user_data import user_data
 import time
 from streamlit_extras.streaming_write import write
 import random
+import os
 
 # Hugging Face API setup
 API_URL = "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill"
 API_TOKEN = st.secrets["secrets"]['API_TOKEN']  # Replace with your actual token
 headers = {"Authorization": f"Bearer {API_TOKEN}"}
 openai.api_key = st.secrets["secrets"]['OPENAI_API_KEY']
+
+
+def convert_drive_link(link_input, media_type):
+    file_id = link_input.split("/d/")[1].split("/")[0]
+    if media_type == 'image':
+        return f"https://drive.google.com/uc?export=view&id={file_id}"
+    elif media_type == 'audio':
+        return f"https://drive.google.com/uc?export=download&id={file_id}"
 
 def chatwrite(texttowrite):
     lines = texttowrite.split('\n')
@@ -41,7 +50,12 @@ def analyze_and_provide_feedback(user_questions, patient_responses):
 # # Example usage at the end of the session
 # feedback = analyze_and_provide_feedback(st.session_state['past'], st.session_state['generated'])
 # message(feedback, key="feedback")
-
+def convert_drive_link(link, media_type='image'):
+    file_id = link.split('/')[-2]
+    if media_type == 'image':
+        return f'https://drive.google.com/uc?export=view&id={file_id}'
+    elif media_type == 'audio':
+        return f'https://drive.google.com/uc?export=download&id={file_id}'
 
 def chatbot():
     
@@ -59,12 +73,6 @@ def chatbot():
         "https://drive.google.com/file/d/1KY89aAMgVX_77m7T9OTA42j_goWNOR5Y/view?usp=sharing"
     ]
 
-    def convert_drive_link(link, media_type='image'):
-        file_id = link.split('/')[-2]
-        if media_type == 'image':
-            return f'https://drive.google.com/uc?export=view&id={file_id}'
-        elif media_type == 'audio':
-            return f'https://drive.google.com/uc?export=download&id={file_id}'
 
     def provide_feedback():
         feedback = "총 점은 75/100 점 입니다. 과거 병력 및 가족력, 흡연/음주 습관에 대한 질문이 포함되면 좋을 것 같습니다."
@@ -190,7 +198,7 @@ def chatbot():
             
                 with st.spinner(" "):
                     completion = openai.ChatCompletion.create(
-                        model="gpt-4o",
+                        model="gpt-4o-mini",
                         messages=[
                             {"role": "system", "content": system_message},
                             {"role": "user", "content": prompt}
@@ -228,6 +236,8 @@ def chatbot():
             message(st.session_state["generated"][i], key=str(i))
 
     
+    image_file_path = "data/CHNCXR_0331_1.png"
+    audio_file_path = "data/101_1b1_Al_sc_Meditron_0.wav"
 
     with st.sidebar:
         with st.form(key='media_link_form'):
@@ -236,11 +246,18 @@ def chatbot():
             submit_link = st.form_submit_button("Submit")
 
             if submit_link and link_input:
-                direct_link = convert_drive_link(link_input, media_type)
                 if media_type == 'image':
-                    st.image(direct_link, caption='Uploaded Image')
+                    if os.path.exists(image_file_path):
+                        st.image(image_file_path, caption='Loaded Image Succesfully')
+                    else:
+                        st.error("이미지 파일이 존재하지 않습니다.")
                 elif media_type == 'audio':
-                    st.audio(direct_link)
+                    if os.path.exists(audio_file_path):
+                        st.audio(audio_file_path)
+                    else:
+                        st.error("오디오 파일이 존재하지 않습니다.")
+
+                        
 
     # st.write("check out this [image preprocessing code](https://colab.research.google.com/drive/1YyC3JRr-x5IVUs5nPmDr0nM-cOTjikjM?usp=sharing)")
     # st.write("check out this [image generaging code](https://colab.research.google.com/drive/1JVSnLqZ6iffsYVlOrpNOWrIDAZGqeACg?usp=sharing)")

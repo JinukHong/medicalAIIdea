@@ -15,3 +15,4 @@ scikit-learn
 xlrd
 streamlit_js_eval
 plotly
+os
